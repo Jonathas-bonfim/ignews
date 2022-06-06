@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Readable } from 'stream';
 import { stripe } from '../../services/stripe'
 import Stripe from "stripe";
-import { SaveSubscription } from "./_lib/manageSubscription";
+import { saveSubscription } from "./_lib/manageSubscription";
 
 async function buffer(readable: Readable) {
   const chunks = [];
@@ -43,7 +43,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         switch (type) {
           case 'checkout.session.completed':
             const checkoutSession = event.data.object as Stripe.Checkout.Session;
-            await SaveSubscription(
+            await saveSubscription(
               checkoutSession.subscription.toString(),
               checkoutSession.customer.toString(),
             )
