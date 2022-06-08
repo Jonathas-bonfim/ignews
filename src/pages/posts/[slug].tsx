@@ -39,11 +39,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   const session = await getSession({ req });
   const { slug } = params;
   console.log(session);
-  if (!session.activeSubscription) {
+  if (!session?.activeSubscription) {
     return {
       redirect: {
         destination: '/',
-        permanent: false,
+        permanent: false
       }
     }
   }
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   const post = {
     slug,
     title: RichText.asText(response?.data?.title),
-    content: RichText.asHtml(response.data.content),
+    content: RichText.asHtml(response.data.content.splice(0, 3)),
     updatedAt: new Date(response.last_publication_date).toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: 'long',
